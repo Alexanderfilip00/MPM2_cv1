@@ -50,21 +50,23 @@ void predaj(ZAKAZNIK* osoba, PRODUKT* produkty);
 
 void spoznaj_zakaznika(ZAKAZNIK *osoba, PRODUKT *produkty) {
 	char temp_rozpocet[15] = "";
+	char pyt[10]="";		//premenna na kontrolu zberu informacii
 	int i, dlzka;
 	short int chyba = 1;
 
 	puts("Vitajte v obchode.\nTento program o vas zbiera informacie, prajete si pokracovat?\n 1 = ano \t 0 = nie");
-	if (getchar() == '0') {
+	scanf("%s", pyt);
+	if (atoi(pyt) == 0) {
+		printf("KONIEC\n");
 		exit(1);
 	}
-	else if (getchar() == '1') {
-
-	}
-	else {
-		puts("Vasu odpoved povazujeme za schvalenie :)");
+	else if ( atoi(pyt) == 1) {
 		puts("");
 	}
-
+	else {
+		printf("Nevyjadrenie nesuhlasu povazujeme za suhlas :)\n");
+	}
+	
 
 	for (i = 1; i <= produkty[0].id; i++) {
 		osoba->kosik[i].id = i;
@@ -81,6 +83,7 @@ void spoznaj_zakaznika(ZAKAZNIK *osoba, PRODUKT *produkty) {
 	scanf("%s", osoba->priezvisko); 
 
 	puts("Zadajte vas rozpocet v celych cislach: ");
+
 	while (chyba == 1) {
 		
 		scanf("%s", temp_rozpocet);
@@ -93,8 +96,10 @@ void spoznaj_zakaznika(ZAKAZNIK *osoba, PRODUKT *produkty) {
 
 		if (chyba == 1) puts("Neplatny vstup. Zadajte rozpocet v celych cislach.");
 	}
-
+	
 	osoba->rozpocet = atoi(temp_rozpocet);
+	strcpy(pyt, "0");
+	
 }
 
 void blocek(ZAKAZNIK* osoba, PRODUKT* produkty, int platba) {
@@ -276,6 +281,7 @@ void predaj(ZAKAZNIK* osoba, PRODUKT* produkty) {
 		}
 		printf("Dakujeme za nakup. Nakupili ste produkty v hodnote %d.\n", zaplatit);
 		blocek(osoba, produkty, zaplatit);
+		free(produkty);
 		exit(0);
 	}
 }
@@ -288,6 +294,7 @@ int main() {
 
 	PRODUKT* produkty = nacitaj_subor("produkty.txt");
 	spoznaj_zakaznika(posoba, produkty);
+	puts("Aspon sem?");
 	
 	predaj(posoba, produkty);
 }
